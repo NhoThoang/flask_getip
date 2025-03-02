@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+    networks:
+      - my_network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - flask_app
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
